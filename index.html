@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>АшХан — Telegram-бот приёма заказов</title>
+<style>
+  :root {
+    --paper: #eeece3;
+    --paper-elevated: #f7f5ec;
+    --ink: #1c211f;
+    --muted: #686f61;
+    --accent: #1f6f5c;
+    --accent-2: #a8671a;
+    --border: #d5d1c1;
+    --stub: #e2ddc9;
+    --shadow: rgba(28, 33, 31, 0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #14191a;
+      --paper-elevated: #1b2224;
+      --ink: #ebeee7;
+      --muted: #92978c;
+      --accent: #55d6ac;
+      --accent-2: #e3a752;
+      --border: #2c3532;
+      --stub: #202826;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    padding: 40px 16px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+
+  .ticket {
+    max-width: 660px;
+    margin: 0 auto;
+    background: var(--paper-elevated);
+    border: 1px solid var(--border);
+    box-shadow: 0 12px 32px var(--shadow);
+    position: relative;
+  }
+
+  .ticket::before {
+    content: "";
+    position: absolute;
+    top: -9px;
+    left: 0;
+    right: 0;
+    height: 18px;
+    background:
+      linear-gradient(-45deg, var(--paper) 6px, transparent 0),
+      linear-gradient(45deg, var(--paper) 6px, transparent 0);
+    background-position: left top;
+    background-repeat: repeat-x;
+    background-size: 18px 18px;
+  }
+
+  header {
+    padding: 36px 36px 22px;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .eyebrow {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  h1 {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: clamp(24px, 5vw, 30px);
+    letter-spacing: -0.01em;
+    margin: 10px 0 8px;
+    text-wrap: balance;
+  }
+
+  header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 48ch;
+  }
+
+  .bot-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 14px;
+    color: var(--paper-elevated);
+    background: var(--accent);
+    padding: 9px 16px;
+    text-decoration: none;
+  }
+
+  .bot-link:hover { opacity: 0.9; }
+
+  section {
+    padding: 28px 36px;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  section:last-of-type { border-bottom: none; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .tag {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--paper-elevated);
+    background: var(--accent);
+    padding: 3px 8px;
+  }
+
+  .section-title {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+  }
+
+  .section-note {
+    margin: 6px 0 18px;
+    color: var(--muted);
+    font-size: 13.5px;
+    max-width: 52ch;
+  }
+
+  ol.steps {
+    list-style: none;
+    counter-reset: step;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  ol.steps li {
+    counter-increment: step;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 14.5px;
+  }
+
+  ol.steps li::before {
+    content: counter(step);
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 13px;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  ol.steps b { color: var(--ink); }
+  ol.steps .sub {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+  }
+
+  ul.plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  ul.plain li {
+    padding-left: 16px;
+    position: relative;
+    font-size: 14.5px;
+  }
+
+  ul.plain li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  ul.plain b { color: var(--ink); }
+  ul.plain .sub {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+  }
+
+  .stub {
+    background: var(--stub);
+    margin: 0 -1px -1px;
+    padding: 28px 36px 34px;
+  }
+
+  .stub .section-note { color: var(--muted); }
+
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px 16px;
+    margin-top: 16px;
+  }
+
+  .price-grid .label { font-size: 14.5px; }
+  .price-grid .label .sub {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+  }
+
+  .price-grid .value {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 14.5px;
+    color: var(--accent-2);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .price-grid .divider {
+    grid-column: 1 / -1;
+    border-top: 1px dashed var(--border);
+    margin: 2px 0;
+  }
+
+  .logic {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  .logic b { color: var(--ink); }
+
+  footer {
+    padding: 20px 36px 30px;
+    font-size: 12.5px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  footer a { color: var(--accent); }
+
+  @media (max-width: 480px) {
+    header, section { padding-left: 22px; padding-right: 22px; }
+    .stub { padding-left: 22px; padding-right: 22px; }
+    footer { padding-left: 22px; padding-right: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ticket">
+  <header>
+    <div class="eyebrow">АшХан · Альметьевск · Telegram-бот</div>
+    <h1>Ваше кафе принимает заказы само</h1>
+    <p>Бот уже собран под «АшХан»: в нём ваше меню — 49 позиций с фото и ценами. Клиент оформляет заказ за минуту, персонал видит его мгновенно, а вы — выручку и отчёты. Можно попробовать прямо сейчас.</p>
+    <a class="bot-link" href="https://t.me/ashhan_zakaz_bot">Открыть бота → @ashhan_zakaz_bot</a>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <span class="tag">Как это работает</span>
+      <span class="section-title">путь одного заказа</span>
+    </div>
+    <ol class="steps">
+      <li><span><b>Клиент собирает заказ в Telegram.</b>
+        <span class="sub">Меню с фото блюд → корзина → доставка или самовывоз → номер телефона одной кнопкой → подтверждение.</span></span></li>
+      <li><span><b>Заказ мгновенно приходит в чат персонала.</b>
+        <span class="sub">Карточка со составом, суммой и телефоном. Никто не отвлекается на звонок — кухня просто видит, что готовить.</span></span></li>
+      <li><span><b>Персонал ведёт заказ кнопками.</b>
+        <span class="sub">Принят → готовится → курьер выехал / готов к выдаче → выполнен. Клиенту на каждом шаге приходит уведомление — он не звонит спросить «ну где там».</span></span></li>
+      <li><span><b>Бот сам просит оценку.</b>
+        <span class="sub">Через час после заказа — оценка 1–5★. Довольных бот ведёт оставить отзыв на Яндекс.Картах. Недовольных — нет: их комментарий приходит вам, и вы решаете проблему до того, как она стала публичным отзывом.</span></span></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="tag">Для вас</span>
+      <span class="section-title">панель владельца</span>
+    </div>
+    <ul class="plain">
+      <li><b>Отчёты в два клика.</b>
+        <span class="sub">Заказы, выручка, средний чек, средняя оценка, топ-5 позиций — за день или период. Без тетрадок и Excel.</span></li>
+      <li><b>Рассылки по своей базе.</b>
+        <span class="sub">Каждый заказавший — ваш подписчик. «Сегодня −20% на комбо» доходит до всех бесплатно: не нужно платить за рекламу, чтобы дотянуться до собственных клиентов.</span></li>
+      <li><b>Стоп-лист.</b>
+        <span class="sub">Закончились наггетсы — два клика, и позиция скрыта из меню. Появились — вернули так же.</span></li>
+      <li><b>Часы работы и правила доставки.</b>
+        <span class="sub">Вне рабочих часов бот вежливо не принимает заказы. Минимальная сумма для доставки — настраивается.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="tag">Зачем</span>
+      <span class="section-title">что это меняет для кафе</span>
+    </div>
+    <ul class="plain">
+      <li><b>Заказы принимаются, даже когда линия занята.</b>
+        <span class="sub">Телефон занят, час пик, некому подойти — бот работает параллельно и не теряет ни одного клиента.</span></li>
+      <li><b>База клиентов остаётся у вас.</b>
+        <span class="sub">Агрегаторы доставки берут комиссию с каждого заказа и не отдают контакты. Здесь заказ — без комиссии, а подписчики — ваши навсегда.</span></li>
+      <li><b>Рейтинг на Яндекс.Картах растёт.</b>
+        <span class="sub">Хорошие оценки бот направляет в публичные отзывы, плохие — лично вам. Каждый недовольный клиент — ваш, до того как напишет отзыв в интернет.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="tag">От вас</span>
+      <span class="section-title">что нужно для запуска</span>
+    </div>
+    <p class="section-note">Бот технически готов — остались только факты, которые знаете лишь вы. На всё вместе уходит один разговор.</p>
+    <ul class="plain">
+      <li>Сверить цены и состав меню (сейчас — по вашему каталогу ВК)</li>
+      <li>Подтвердить часы приёма заказов, стоимость доставки и минимальную сумму</li>
+      <li>Сказать, кто из персонала будет вести заказы — добавим его в рабочий чат</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="tag" style="background:var(--accent-2);">Этап 2</span>
+      <span class="section-title">заказы и через ВКонтакте</span>
+    </div>
+    <p class="section-note">Люди уже находят «АшХан» в вашем сообществе ВК — там же они смогут и заказывать, прямо из сообщений группы.</p>
+    <ul class="plain">
+      <li><b>То же меню, те же заказы.</b>
+        <span class="sub">Клиент из ВК проходит тот же путь: меню → корзина → оформление. Заказы из ВК падают в тот же чат персонала — кухне неважно, откуда заказ, а выручка в отчётах считается вместе.</span></li>
+      <li><b>От вас — 5 минут.</b>
+        <span class="sub">Нужен ключ доступа сообщества (выдаётся в настройках группы ВК). Можно созвониться и пройти вместе.</span></li>
+      <li><b>Срок — 3–5 дней после доступа.</b>
+        <span class="sub">Подключается отдельным этапом, когда Telegram-бот уже поработает. Стоимость обсудим отдельно.</span></li>
+    </ul>
+  </section>
+
+  <div class="stub">
+    <div class="section-head">
+      <span class="tag" style="background:var(--accent-2);">Условия</span>
+      <span class="section-title">сколько это стоит</span>
+    </div>
+    <div class="price-grid">
+      <span class="label">Внедрение под ключ
+        <span class="sub">настройка под ваше кафе, сверка меню, обучение персонала — разово</span></span>
+      <span class="value">14 000 ₽</span>
+      <div class="divider"></div>
+      <span class="label">Поддержка и хостинг
+        <span class="sub">бот работает на сервере круглосуточно; правки меню и цен — включены</span></span>
+      <span class="value">700 ₽/мес</span>
+      <div class="divider"></div>
+      <span class="label">Первый месяц поддержки</span>
+      <span class="value">бесплатно</span>
+    </div>
+    <div class="logic">
+      <b>Без скрытых платежей:</b> никаких комиссий с заказов — сколько бы их ни было, цена не меняется. Для сравнения: агрегаторы доставки забирают 15–35% с каждого чека.
+    </div>
+    <div class="logic">
+      <b>Куда можно расти дальше</b> (по желанию, отдельными этапами): ВКонтакте — этап 2 выше, оплата картой прямо в боте, программа лояльности, зоны доставки с разной стоимостью.
+    </div>
+  </div>
+
+  <footer>АшХан · бот работает уже сейчас — <a href="https://t.me/ashhan_zakaz_bot">попробуйте сами</a> · вопросы обсудим при встрече</footer>
+</div>
+
+</body>
+</html>
