@@ -1,0 +1,242 @@
+<title>Подготовка к запуску</title>
+<style>
+  :root {
+    --bg: #fbf9f5;
+    --panel: #f1ede3;
+    --ink: #201a12;
+    --ink-dim: #6b6255;
+    --accent: #b8471f;
+    --line: #e2dbc9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17140f;
+      --panel: #211c15;
+      --ink: #ece5d6;
+      --ink-dim: #a89c86;
+      --accent: #e07a4c;
+      --line: #322b21;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17140f;
+    --panel: #211c15;
+    --ink: #ece5d6;
+    --ink-dim: #a89c86;
+    --accent: #e07a4c;
+    --line: #322b21;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 56px 24px 90px; }
+
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 12px; text-wrap: balance; }
+  .sub { color: var(--ink-dim); font-size: 16px; margin: 0 0 8px; max-width: 48ch; }
+
+  .step {
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .step-head { display: flex; gap: 14px; align-items: baseline; }
+  .num {
+    flex: none;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    transform: translateY(3px);
+  }
+  h2 { font-size: 20px; margin: 0; }
+  .who {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    padding: 2px 10px;
+    margin-top: 8px;
+  }
+  .step-body { margin-left: 42px; }
+
+  ol, ul { margin: 14px 0 0; padding-left: 20px; }
+  li { margin-bottom: 8px; }
+  li::marker { color: var(--accent); }
+
+  .note {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--ink-dim);
+  }
+  .note b { color: var(--ink); }
+  code {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 13px;
+  }
+  .path { color: var(--ink); font-weight: 600; }
+  .dish-list { font-size: 15px; }
+  a { color: var(--accent); }
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Lamore Mio · подготовка к запуску</p>
+  <h1>Что нужно от вас, по шагам</h1>
+  <p class="sub">Всё делается один раз. Первые три пункта — самые важные, без них бот не запустить. Пункты 4 и 5 — по желанию.</p>
+
+  <section class="step">
+    <div class="step-head">
+      <span class="num">1</span>
+      <div>
+        <h2>Сверить меню и цены</h2>
+        <span class="who">15 минут · менеджер</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Меню в боте уже собрано с вашей страницы ВКонтакте — 92 позиции: пицца, роллы, бургеры, салаты, снэки, блины, соусы.</p>
+      <ol>
+        <li>Откройте бота и пройдите по всем разделам.</li>
+        <li>Скажите, где цены изменились.</li>
+        <li>Скажите, каких блюд уже нет, а какие появились.</li>
+      </ol>
+      <div class="note">
+        Отдельно проверьте состав ролла <b>«Горячая Мексика»</b>: в каталоге указана «конская грудинка» — похоже на опечатку.
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-head">
+      <span class="num">2</span>
+      <div>
+        <h2>Прислать фото шести блюд</h2>
+        <span class="who">10 минут · любой сотрудник</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>У остальных 86 позиций фото уже есть. У этих в каталоге ВКонтакте вместо блюда стоит общая картинка заведения:</p>
+      <ul class="dish-list">
+        <li>Запечённый «Банзай»</li>
+        <li>Горячий «Токио»</li>
+        <li>Большой ролл «Ламоре»</li>
+        <li>Холодный «Судоку»</li>
+        <li>Горячий «Мексика»</li>
+        <li>«Жёлтый дракон»</li>
+      </ul>
+      <div class="note">
+        Подойдут обычные фото с телефона при дневном свете. Без них позиции тоже продаются, просто карточка будет текстом.
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-head">
+      <span class="num">3</span>
+      <div>
+        <h2>Подтвердить условия работы</h2>
+        <span class="who">5 минут · владелец</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Сейчас в боте указано вот это — подтвердите или поправьте:</p>
+      <ul>
+        <li><b>Доставка:</b> бесплатно в черте города, для отдалённых районов стоимость уточняет оператор при подтверждении заказа.</li>
+        <li><b>Часы приёма заказов:</b> 10:00–22:00. Вне этих часов бот не даёт оформить заказ.</li>
+        <li><b>Телефон для клиентов:</b> +7 904 676-65-67.</li>
+        <li><b>Адрес самовывоза:</b> ул. Зифы Балакиной, 3.</li>
+        <li><b>Ссылка на Яндекс.Карты</b> — пришлите карточку заведения. Бот будет предлагать оставить отзыв тем, кому всё понравилось.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-head">
+      <span class="num">4</span>
+      <div>
+        <h2>Открыть доступ к сообществу ВКонтакте</h2>
+        <span class="who">10 минут · администратор сообщества</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Бот будет работать от имени вашего сообщества «Пиццерия Lamore Mio» — клиенты пишут привычной вам странице.</p>
+      <ol>
+        <li><span class="path">Управление → Сообщения</span> → «Сообщения сообщества»: <b>включены</b>.</li>
+        <li><span class="path">Управление → Сообщения → Настройки для бота</span> → включить «Возможности ботов» и «Разрешать добавлять сообщество в чаты». Нажать <b>Сохранить</b>.</li>
+        <li><span class="path">Управление → Работа с API → Ключи доступа</span> → создать ключ с правами <b>«сообщения»</b> и <b>«фотографии»</b> → прислать его мне.</li>
+        <li><span class="path">Управление → Работа с API → Long Poll API</span> → включить, версия <code>5.199</code>, во вкладке «Типы событий» отметить <b>«Входящее сообщение»</b>.</li>
+        <li>Создать <b>отдельную беседу</b> для заказов — не общий рабочий чат, чтобы заказы не терялись в переписке. Добавить туда сотрудников, которые принимают заказы.</li>
+        <li>На странице сообщества нажать <b>«Добавить в чат»</b> и выбрать эту беседу.</li>
+      </ol>
+      <div class="note">
+        <b>Ключ доступа — как пароль.</b> Присылайте его личным сообщением. В любой момент его можно удалить в том же разделе, и бот отключится.
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-head">
+      <span class="num">5</span>
+      <div>
+        <h2>Если нужен бот в MAX</h2>
+        <span class="who">до 3 дней · владелец или ИП</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>MAX разрешает ботов только верифицированным организациям. ИП подходит, физлицо — нет. Верификацию проходит владелец или человек с правом первой подписи.</p>
+      <ol>
+        <li>Открыть <a href="https://business.max.ru" target="_blank">business.max.ru</a> или мини-приложение «MAX для бизнеса».</li>
+        <li>Создать профиль организации и пройти <b>верификацию через Госуслуги</b> (либо T-Business ID / Alfa ID).</li>
+        <li>В кабинете создать бота: имя, аватар, описание.</li>
+        <li>Отправить бота на модерацию — занимает <b>до 48 рабочих часов</b>.</li>
+        <li>После одобрения в кабинете появится <b>токен бота</b> — прислать его мне.</li>
+      </ol>
+      <div class="note">
+        Меню, заказы и отчёты у ботов общие — заполнять всё заново не нужно. Подключение занимает пару минут. <b>Оплата за MAX — только после того, как бот реально заработает.</b>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-head">
+      <span class="num">6</span>
+      <div>
+        <h2>Запуск</h2>
+        <span class="who">в тот же день</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <ol>
+        <li>Я подключаю бота к вашему сообществу и вношу правки по меню.</li>
+        <li>Вместе делаем тестовый заказ и смотрим, что он дошёл до беседы персонала.</li>
+        <li>Показываю сотрудникам кнопки: «Принять» → «Готовится» → «Готов». Клиенту уведомления уходят сами.</li>
+        <li>Объявляете бота клиентам — постом в сообществе и на кассе.</li>
+      </ol>
+    </div>
+  </section>
+
+</div>
